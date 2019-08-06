@@ -98,24 +98,18 @@
         commentLists: [
           {id: 1}
         ], // 评论数据数组
+				page:0,
       };
     },
     async mounted() {
-      this.showTopicDetail(this.$route);
-      this.$nextTick(() => {
-        new BScroll(".topicDetailContent", {
-          click: true
-        });
-      });
-      /*new BScroll(".topicDetailContent", {
-        click: true
-      });*/
-      const url = "/topic/v1/find/recAuto.json";
-      const res = await reqComment(url, 1, 5);
+			this.showTopicDetail(this.$route);
+			const url = "/topic/v1/find/recAuto.json";
+      const res = await reqComment(url, ++this.page, 1);
       // console.log(res);
       if (res.code === '200') {
         this.commentLists = [{...this.commentLists[0], ...res.data}];
-        // this.commentLists = res.data.result;
+				// this.commentLists = res.data.result;
+				console.log(this.commentLists)
       }
       // console.log(this.commentLists);
       // console.log(this.commentLists[0].result[0].look);  //object
@@ -123,6 +117,29 @@
       // console.log(this.commentLists[0].result[0]); // arr
       // console.log(this.commentLists[0].result[0].topics[0]); // object
       // console.log(this.commentLists[0].result[0].topics[0].type);  // object
+      this.$nextTick(() => {
+        this.scroll = new BScroll(".topicDetailContent", {
+					click: true,
+					pullDownRefresh:{
+						threshold:-10,
+						stop:20
+					},
+					probeType:3,
+					startY:0,
+				});
+				this.scroll.on("pullingDown", async()=>{
+					const res = await reqComment(url, ++this.page, 1);
+					if (res.code === '200') {
+						console.log(this.commentLists[0].result,res.data.result)
+						this.commentLists = [{...this.commentLists[0],...res.data}];
+						// this.commentLists = [{...this.commentLists[0].result,...res.data}];
+						// this.commentLists = res.data.result;
+						console.log(this.commentLists)
+					}
+					this.scroll.finishPullDown()
+				})
+      });
+      
     },
     watch: {
       $route(value) {

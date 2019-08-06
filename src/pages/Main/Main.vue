@@ -28,7 +28,6 @@
             <ul class="allList" v-if="isShow">
               <li class="allItem" :class="selected === index ? 'on':''" v-for="(navList,index) in navLists" :key="index" @click="selected = index">{{navList.title}}</li>
             </ul>
-
           </div>
         </div>
       </header>
@@ -152,7 +151,10 @@
     methods:{
       arrowToggle(){
         // this.isShow
-      }
+      },
+			togglePath(index){
+				this.selected = index
+			}
     }
   }
 </script>

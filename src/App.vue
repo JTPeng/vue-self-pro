@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="app">
     <FooterGuide v-show="$route.meta.isShowFooter"/>
     <router-view></router-view>
   </div>
@@ -12,4 +12,8 @@ export default {
 };
 </script>
 
-<style scoped></style>
+<style lang="stylus" rel="stylesheet/stylus" scoped>
+.app
+	width 100%
+	height 100%
+</style>

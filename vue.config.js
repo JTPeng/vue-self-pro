@@ -24,5 +24,7 @@ module.exports = {
 				}
 			}
 		}
-	}
+	},
+	// 静态资源打包
+	publicPath: './'
 }
