@@ -124,11 +124,14 @@
 						threshold:-10,
 						stop:20
 					},
+          pullUpLoad: {
+            threshold: -10
+          },
 					probeType:3,
 					startY:0,
 				});
 				this.scroll.on("pullingDown", async()=>{
-					const res = await reqComment(url, ++this.page, 1);
+					const res = await reqComment(url, ++this.page, 5);
 					if (res.code === '200') {
 						console.log(this.commentLists[0].result,res.data.result)
 						this.commentLists = [{...this.commentLists[0],...res.data}];
@@ -138,8 +141,19 @@
 					}
 					this.scroll.finishPullDown()
 				})
+				this.scroll.on("pullingUp", async()=>{
+					const res = await reqComment(url, ++this.page, 5);
+					if (res.code === '200') {
+						console.log(this.commentLists[0].result,res.data.result)
+						this.commentLists = [{...this.commentLists[0],...res.data}];
+						// this.commentLists = [{...this.commentLists[0].result,...res.data}];
+						// this.commentLists = res.data.result;
+						console.log(this.commentLists)
+					}
+					this.scroll.finishPullUp()
+				})
       });
-      
+
     },
     watch: {
       $route(value) {
@@ -158,7 +172,7 @@
 <style lang="stylus" rel="stylesheet/stylus" scoped>
   .topicDetailContent
     width 100%
-    height 230px
+    height 600px
     /* 内容评论 */
 
     .topicDetail

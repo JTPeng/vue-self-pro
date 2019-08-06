@@ -143,5 +143,4 @@
   .topicDetailList
     width 100%
     padding-top 86px
-    padding-bottom 50px
 </style>
